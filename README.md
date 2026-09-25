@@ -31,4 +31,4 @@ Each chapter's checklist and reflection notes are saved with `localStorage`, sco
 
 ## Author
 
-Kamol Das · MBIO, University of Chittagong
+Kamol Das · Microbiology, University of Chittagong
