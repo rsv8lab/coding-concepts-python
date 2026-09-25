@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chapter 3 — Pandas · Coding Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F3F1EA;--ink:#0A1F44;--ink-soft:#324A73;--line:#C9CDBE;--accent:#B5501A;--accent-soft:rgba(181,80,26,.08);--card:#FFFFFF;--code-bg:#0A1F44;--code-text:#E8ECF5;--success:#2E7D32;--success-soft:rgba(46,125,50,.08);color-scheme:light dark;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#141A26;--ink:#EDEFF5;--ink-soft:#9FB0D0;--line:#2B3448;--accent:#E07A45;--accent-soft:rgba(224,122,69,.12);--card:#1B2233;--code-bg:#0B111C;--code-text:#D6DEF0;--success:#66BB6A;--success-soft:rgba(102,187,106,.12);}}
+:root[data-theme="dark"]{--paper:#141A26;--ink:#EDEFF5;--ink-soft:#9FB0D0;--line:#2B3448;--accent:#E07A45;--accent-soft:rgba(224,122,69,.12);--card:#1B2233;--code-bg:#0B111C;--code-text:#D6DEF0;--success:#66BB6A;--success-soft:rgba(102,187,106,.12);}
+*{box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{background:var(--paper);font-family:'JetBrains Mono',monospace;color:var(--ink);margin:0;line-height:1.65;padding:0 0 60px;}
+.site-header{max-width:860px;margin:0 auto;padding:40px 24px 16px;}
+.site-header .kicker{font-size:12px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;}
+.site-header .kicker::before{content:"# ";opacity:.7;}
+.site-header h1{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(26px,4.5vw,38px);line-height:1.05;margin:0 0 6px;}
+.site-header h1 em{font-style:italic;font-weight:400;color:var(--ink-soft);}
+.chapter-nav{max-width:860px;margin:0 auto;padding:10px 24px 20px;display:flex;flex-wrap:wrap;gap:6px;}
+.chapter-nav a{display:inline-flex;align-items:center;gap:6px;font-size:11px;padding:5px 11px;border:1px solid var(--line);border-radius:999px;color:var(--ink-soft);text-decoration:none;background:var(--card);}
+.chapter-nav a.cur{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);font-weight:700;}
+.chapter-nav a .n{font-weight:700;color:var(--accent);}
+.chapter{max-width:860px;margin:0 auto 36px;background:var(--card);border:1px solid var(--line);border-radius:4px;overflow:hidden;box-shadow:0 1px 0 var(--line),0 12px 32px -20px rgba(10,31,68,.2);}
+.chapter-head{padding:26px 30px 22px;border-bottom:1px solid var(--line);}
+.chapter-head .mod-tag{display:block;font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+.chapter-head h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(22px,4vw,30px);line-height:1.1;margin:0 0 6px;}
+.chapter-head h2 em{font-style:italic;font-weight:400;color:var(--ink-soft);}
+.chapter-head .tagline{font-size:12px;color:var(--ink-soft);font-style:italic;margin:0;}
+.chapter-body{padding:26px 30px 30px;}
+.concept-table{width:100%;border-collapse:collapse;font-size:12.5px;margin:0 0 22px;}
+.concept-table th{text-align:left;font-weight:700;color:var(--ink);background:var(--paper);padding:8px 12px;width:90px;border:1px solid var(--line);vertical-align:top;}
+.concept-table td{padding:8px 12px;border:1px solid var(--line);color:var(--ink);vertical-align:top;}
+.mnemonic{display:flex;align-items:baseline;gap:10px;background:var(--paper);border-left:3px solid var(--accent);padding:10px 14px;margin:0 0 22px;font-size:12px;}
+.mnemonic .label{font-weight:700;color:var(--accent);white-space:nowrap;}
+.code-wrap{position:relative;margin:0 0 22px;}
+pre{background:var(--code-bg);color:var(--code-text);padding:16px 18px;border-radius:3px;overflow-x:auto;font-size:12px;line-height:1.65;margin:0;font-family:'JetBrains Mono',monospace;}
+pre .cm{color:#8FA3C8;font-style:italic;} pre .kw{color:#F0B27A;} pre .fn{color:#A8D8B9;} pre .st{color:#E8A87C;}
+.copy-btn{position:absolute;top:10px;right:10px;font-size:10px;letter-spacing:.08em;padding:4px 10px;border:1px solid rgba(255,255,255,.25);border-radius:3px;background:rgba(255,255,255,.08);color:var(--code-text);cursor:pointer;}
+.copy-btn.copied{border-color:var(--success);color:var(--success);}
+.cycle{border:1px solid var(--line);border-radius:4px;overflow:hidden;margin:0 0 22px;}
+.cycle-head{padding:12px 16px;background:var(--paper);border-bottom:1px solid var(--line);font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);}
+.cycle-step{padding:16px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:30px 1fr;gap:12px;}
+.cycle-step:last-child{border-bottom:none;}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--paper);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.step-content h4{margin:0 0 4px;font-size:12.5px;}
+.step-content p{margin:0 0 8px;font-size:12px;color:var(--ink-soft);}
+.step-hint{font-size:11px;color:var(--ink-soft);background:var(--paper);border-left:2px solid var(--line);padding:6px 10px;border-radius:2px;font-style:italic;}
+.checklist{list-style:none;margin:8px 0 0;padding:0;}
+.checklist li{display:flex;gap:10px;padding:7px 0;border-bottom:1px dotted var(--line);font-size:12px;}
+.checklist li:last-child{border-bottom:none;}
+.checklist input[type=checkbox]{appearance:none;width:16px;height:16px;border:1.5px solid var(--line);border-radius:3px;margin-top:2px;cursor:pointer;position:relative;background:var(--card);flex-shrink:0;}
+.checklist input:checked{background:var(--success);border-color:var(--success);}
+.checklist input:checked::after{content:"✓";position:absolute;top:-3px;left:2px;font-size:12px;color:#fff;font-weight:700;}
+.checklist label{cursor:pointer;}
+.checklist input:checked+label{color:var(--ink-soft);text-decoration:line-through;}
+.notes-area{width:100%;min-height:70px;padding:10px 12px;font-family:inherit;font-size:12px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:3px;resize:vertical;margin-top:6px;}
+.site-footer{max-width:860px;margin:0 auto;padding:20px 24px;text-align:center;}
+.reset-btn{font-size:11px;letter-spacing:.08em;padding:6px 14px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink-soft);cursor:pointer;}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <p class="kicker">python.stack · learning studio</p>
+  <h1>Pandas <em>— Tabular Data</em></h1>
+</header>
+
+<nav class="chapter-nav">
+  <a href="chapter1.html"><span class="n">01</span> Data Types</a>
+  <a href="chapter2.html"><span class="n">02</span> NumPy</a>
+  <a href="chapter3.html" class="cur"><span class="n">03</span> Pandas</a>
+  <a href="chapter4.html"><span class="n">04</span> Visualize</a>
+  <a href="chapter5.html"><span class="n">05</span> SciPy</a>
+  <a href="chapter6.html"><span class="n">06</span> openpyxl</a>
+  <a href="chapter7.html"><span class="n">07</span> PySide6</a>
+  <a href="chapter8.html"><span class="n">08</span> scikit-learn</a>
+  <a href="chapter9.html"><span class="n">09</span> Advanced AI</a>
+</nav>
+<div style="max-width:860px;margin:-8px auto 8px;padding:0 24px;"><a href="index.html" style="font-size:11px;color:var(--ink-soft);text-decoration:none;">&larr; Back to book overview</a></div>
+
+<section class="chapter">
+  <div class="chapter-head">
+    <span class="mod-tag">Module 03</span>
+    <h2>Pandas <em>— Tabular Data</em></h2>
+    <p class="tagline">A DataFrame is a dict of NumPy arrays wearing labelled rows and columns.</p>
+  </div>
+  <div class="chapter-body">
+
+    <table class="concept-table">
+      <tr><th>What</th><td>DataFrame (2D labelled table) and Series (1 labelled column) on top of NumPy.</td></tr>
+      <tr><th>Why</th><td>Real data arrives messy in CSV/Excel/SQL. Pandas is the standard load-clean-reshape tool.</td></tr>
+      <tr><th>How</th><td><code>pd.read_csv()</code>, boolean masks, <code>groupby()</code>, <code>merge()</code>.</td></tr>
+      <tr><th>When</th><td>The moment data has more than one "column" of meaning — almost always.</td></tr>
+      <tr><th>Where</th><td>Feeds Matplotlib/Seaborn (plots) and scikit-learn (X, y arrays).</td></tr>
+    </table>
+
+    <div class="mnemonic"><span class="label">L.F.G.M.</span><span>Load · Filter · Group · Merge — the four verbs of real analysis</span></div>
+
+    <div class="code-wrap">
+      <button class="copy-btn" data-copy>copy</button>
+      <pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+df = pd.read_csv(<span class="st">"students.csv"</span>)                 <span class="cm"># LOAD</span>
+high = df[df[<span class="st">"gpa"</span>] &gt; 3.5]                     <span class="cm"># FILTER: boolean mask</span>
+by_dept = df.groupby(<span class="st">"department"</span>)[<span class="st">"gpa"</span>].mean()  <span class="cm"># GROUP</span>
+merged = pd.merge(df, dept_info, on=<span class="st">"department"</span>)   <span class="cm"># MERGE: SQL-style join</span>
+
+df.isna().sum()   <span class="cm"># ALWAYS check missing values first</span>
+df.dtypes         <span class="cm"># ALWAYS check column types</span></pre>
+    </div>
+
+    <div class="cycle">
+      <div class="cycle-head">◈ Learning Cycle — Chapter 03</div>
+      <div class="cycle-step"><span class="step-num">1</span><div class="step-content">
+        <h4>Read the concept table once</h4>
+        <p>Notice: DataFrame = dict of NumPy arrays + labels. That one idea explains both its speed and its API.</p>
+      </div></div>
+      <div class="cycle-step"><span class="step-num">2</span><div class="step-content">
+        <h4>Type the code yourself — no copy-paste</h4>
+        <p>Type it, then replace <code>"students.csv"</code> with a CSV you actually care about. Run <code>df.isna().sum()</code> and <code>df.dtypes</code> first, every single time.</p>
+        <div class="step-hint">Those two lines prevent 80% of downstream ML bugs. Make them a reflex.</div>
+      </div></div>
+      <div class="cycle-step"><span class="step-num">3</span><div class="step-content">
+        <h4>Apply it to your own data</h4>
+        <p>Load your CSV. Filter one meaningful condition. Group by one categorical column and compute a mean. Merge with a second small table if you can.</p>
+      </div></div>
+      <div class="cycle-step"><span class="step-num">4</span><div class="step-content">
+        <h4>Reflect &amp; note</h4>
+        <p>Did any column load as <code>object</code> when it should have been numeric? That's dirty data — note it.</p>
+        <textarea class="notes-area" id="notes" placeholder="e.g. 'age' loaded as object because of an 'N/A' string — had to coerce with pd.to_numeric(errors='coerce')..."></textarea>
+      </div></div>
+      <div class="cycle-step"><span class="step-num">5</span><div class="step-content">
+        <h4>Tick off before moving on</h4>
+        <ul class="checklist" id="checklist">
+          <li><input type="checkbox" id="c1"><label for="c1">I can explain the DataFrame = dict of arrays idea.</label></li>
+          <li><input type="checkbox" id="c2"><label for="c2">I typed and ran the code on my own CSV.</label></li>
+          <li><input type="checkbox" id="c3"><label for="c3">I ran isna().sum() and dtypes as my first two commands.</label></li>
+          <li><input type="checkbox" id="c4"><label for="c4">I did a filter, a groupby, and (ideally) a merge.</label></li>
+          <li><input type="checkbox" id="c5"><label for="c5">I wrote a reflection note above.</label></li>
+        </ul>
+      </div></div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <button class="reset-btn" id="resetAll">Reset chapter progress</button>
+</footer>
+
+<script>
+document.querySelectorAll('[data-copy]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const pre=btn.closest('.code-wrap').querySelector('pre');
+    navigator.clipboard.writeText(pre.innerText).then(()=>{
+      btn.textContent='copied';btn.classList.add('copied');
+      setTimeout(()=>{btn.textContent='copy';btn.classList.remove('copied');},1500);
+    });
+  });
+});
+const KEY='coding-concepts-ch3';
+document.querySelectorAll('#checklist input[type=checkbox]').forEach((box,i)=>{
+  const k=KEY+'-check-'+i;
+  try{if(localStorage.getItem(k)==='true')box.checked=true;}catch(e){}
+  box.addEventListener('change',()=>{try{localStorage.setItem(k,box.checked);}catch(e){}});
+});
+const notes=document.getElementById('notes');
+try{const s=localStorage.getItem(KEY+'-notes');if(s)notes.value=s;}catch(e){}
+notes.addEventListener('input',()=>{try{localStorage.setItem(KEY+'-notes',notes.value);}catch(e){}});
+document.getElementById('resetAll').addEventListener('click',()=>{
+  if(!confirm('Clear checklist and notes for Chapter 3?'))return;
+  try{Object.keys(localStorage).filter(k=>k.startsWith(KEY)).forEach(k=>localStorage.removeItem(k));}catch(e){}
+  document.querySelectorAll('#checklist input[type=checkbox]').forEach(b=>b.checked=false);
+  notes.value='';
+});
+</script>
+</body>
+</html>

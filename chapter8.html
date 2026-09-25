@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chapter 8 — scikit-learn · Coding Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F3F1EA;--ink:#0A1F44;--ink-soft:#324A73;--line:#C9CDBE;--accent:#B5501A;--accent-soft:rgba(181,80,26,.08);--card:#FFFFFF;--code-bg:#0A1F44;--code-text:#E8ECF5;--success:#2E7D32;--success-soft:rgba(46,125,50,.08);color-scheme:light dark;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#141A26;--ink:#EDEFF5;--ink-soft:#9FB0D0;--line:#2B3448;--accent:#E07A45;--accent-soft:rgba(224,122,69,.12);--card:#1B2233;--code-bg:#0B111C;--code-text:#D6DEF0;--success:#66BB6A;--success-soft:rgba(102,187,106,.12);}}
+:root[data-theme="dark"]{--paper:#141A26;--ink:#EDEFF5;--ink-soft:#9FB0D0;--line:#2B3448;--accent:#E07A45;--accent-soft:rgba(224,122,69,.12);--card:#1B2233;--code-bg:#0B111C;--code-text:#D6DEF0;--success:#66BB6A;--success-soft:rgba(102,187,106,.12);}
+*{box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{background:var(--paper);font-family:'JetBrains Mono',monospace;color:var(--ink);margin:0;line-height:1.65;padding:0 0 60px;}
+.site-header{max-width:860px;margin:0 auto;padding:40px 24px 16px;}
+.site-header .kicker{font-size:12px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;}
+.site-header .kicker::before{content:"# ";opacity:.7;}
+.site-header h1{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(26px,4.5vw,38px);line-height:1.05;margin:0 0 6px;}
+.site-header h1 em{font-style:italic;font-weight:400;color:var(--ink-soft);}
+.chapter-nav{max-width:860px;margin:0 auto;padding:10px 24px 20px;display:flex;flex-wrap:wrap;gap:6px;}
+.chapter-nav a{display:inline-flex;align-items:center;gap:6px;font-size:11px;padding:5px 11px;border:1px solid var(--line);border-radius:999px;color:var(--ink-soft);text-decoration:none;background:var(--card);}
+.chapter-nav a.cur{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);font-weight:700;}
+.chapter-nav a .n{font-weight:700;color:var(--accent);}
+.chapter{max-width:860px;margin:0 auto 36px;background:var(--card);border:1px solid var(--line);border-radius:4px;overflow:hidden;box-shadow:0 1px 0 var(--line),0 12px 32px -20px rgba(10,31,68,.2);}
+.chapter-head{padding:26px 30px 22px;border-bottom:1px solid var(--line);}
+.chapter-head .mod-tag{display:block;font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+.chapter-head h2{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(22px,4vw,30px);line-height:1.1;margin:0 0 6px;}
+.chapter-head h2 em{font-style:italic;font-weight:400;color:var(--ink-soft);}
+.chapter-head .tagline{font-size:12px;color:var(--ink-soft);font-style:italic;margin:0;}
+.chapter-body{padding:26px 30px 30px;}
+.concept-table{width:100%;border-collapse:collapse;font-size:12.5px;margin:0 0 22px;}
+.concept-table th{text-align:left;font-weight:700;color:var(--ink);background:var(--paper);padding:8px 12px;width:90px;border:1px solid var(--line);vertical-align:top;}
+.concept-table td{padding:8px 12px;border:1px solid var(--line);color:var(--ink);vertical-align:top;}
+.mnemonic{display:flex;align-items:baseline;gap:10px;background:var(--paper);border-left:3px solid var(--accent);padding:10px 14px;margin:0 0 22px;font-size:12px;}
+.mnemonic .label{font-weight:700;color:var(--accent);white-space:nowrap;}
+.code-wrap{position:relative;margin:0 0 22px;}
+pre{background:var(--code-bg);color:var(--code-text);padding:16px 18px;border-radius:3px;overflow-x:auto;font-size:12px;line-height:1.65;margin:0;font-family:'JetBrains Mono',monospace;}
+pre .cm{color:#8FA3C8;font-style:italic;} pre .kw{color:#F0B27A;} pre .fn{color:#A8D8B9;} pre .st{color:#E8A87C;}
+.copy-btn{position:absolute;top:10px;right:10px;font-size:10px;letter-spacing:.08em;padding:4px 10px;border:1px solid rgba(255,255,255,.25);border-radius:3px;background:rgba(255,255,255,.08);color:var(--code-text);cursor:pointer;}
+.copy-btn.copied{border-color:var(--success);color:var(--success);}
+.cycle{border:1px solid var(--line);border-radius:4px;overflow:hidden;margin:0 0 22px;}
+.cycle-head{padding:12px 16px;background:var(--paper);border-bottom:1px solid var(--line);font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);}
+.cycle-step{padding:16px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:30px 1fr;gap:12px;}
+.cycle-step:last-child{border-bottom:none;}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--paper);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.step-content h4{margin:0 0 4px;font-size:12.5px;}
+.step-content p{margin:0 0 8px;font-size:12px;color:var(--ink-soft);}
+.step-hint{font-size:11px;color:var(--ink-soft);background:var(--paper);border-left:2px solid var(--line);padding:6px 10px;border-radius:2px;font-style:italic;}
+.checklist{list-style:none;margin:8px 0 0;padding:0;}
+.checklist li{display:flex;gap:10px;padding:7px 0;border-bottom:1px dotted var(--line);font-size:12px;}
+.checklist li:last-child{border-bottom:none;}
+.checklist input[type=checkbox]{appearance:none;width:16px;height:16px;border:1.5px solid var(--line);border-radius:3px;margin-top:2px;cursor:pointer;position:relative;background:var(--card);flex-shrink:0;}
+.checklist input:checked{background:var(--success);border-color:var(--success);}
+.checklist input:checked::after{content:"✓";position:absolute;top:-3px;left:2px;font-size:12px;color:#fff;font-weight:700;}
+.checklist label{cursor:pointer;}
+.checklist input:checked+label{color:var(--ink-soft);text-decoration:line-through;}
+.notes-area{width:100%;min-height:70px;padding:10px 12px;font-family:inherit;font-size:12px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:3px;resize:vertical;margin-top:6px;}
+.site-footer{max-width:860px;margin:0 auto;padding:20px 24px;text-align:center;}
+.reset-btn{font-size:11px;letter-spacing:.08em;padding:6px 14px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink-soft);cursor:pointer;}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <p class="kicker">python.stack · learning studio</p>
+  <h1>scikit-learn <em>— Machine Learning</em></h1>
+</header>
+
+<nav class="chapter-nav">
+  <a href="chapter1.html"><span class="n">01</span> Data Types</a>
+  <a href="chapter2.html"><span class="n">02</span> NumPy</a>
+  <a href="chapter3.html"><span class="n">03</span> Pandas</a>
+  <a href="chapter4.html"><span class="n">04</span> Visualize</a>
+  <a href="chapter5.html"><span class="n">05</span> SciPy</a>
+  <a href="chapter6.html"><span class="n">06</span> openpyxl</a>
+  <a href="chapter7.html"><span class="n">07</span> PySide6</a>
+  <a href="chapter8.html" class="cur"><span class="n">08</span> scikit-learn</a>
+  <a href="chapter9.html"><span class="n">09</span> Advanced AI</a>
+</nav>
+<div style="max-width:860px;margin:-8px auto 8px;padding:0 24px;"><a href="index.html" style="font-size:11px;color:var(--ink-soft);text-decoration:none;">&larr; Back to book overview</a></div>
+
+<section class="chapter">
+  <div class="chapter-head">
+    <span class="mod-tag">Module 08</span>
+    <h2>scikit-learn <em>— Machine Learning</em></h2>
+    <p class="tagline">Every algorithm here follows the same 4-step contract, regardless of which model you pick.</p>
+  </div>
+  <div class="chapter-body">
+
+    <table class="concept-table">
+      <tr><th>What</th><td>Classical ML algorithms (regression, classification, clustering) with one API: fit / predict.</td></tr>
+      <tr><th>Why</th><td>Instead of hand-coding rules, the algorithm learns the mapping X → y from examples.</td></tr>
+      <tr><th>How</th><td><code>model.fit(X_train, y_train)</code>; <code>model.predict(X_test)</code> — identical shape for every algorithm.</td></tr>
+      <tr><th>When</th><td>You have labelled historical data and want to predict for NEW inputs.</td></tr>
+      <tr><th>Where</th><td>Consumes Pandas DataFrames; evaluates via <code>sklearn.metrics</code>; diagnosed via Module 4.</td></tr>
+    </table>
+
+    <div class="mnemonic"><span class="label">S.F.P.E.</span><span>Split · Fit · Predict · Evaluate — the four-step contract of EVERY model</span></div>
+
+    <div class="code-wrap">
+      <button class="copy-btn" data-copy>copy</button>
+      <pre><span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+<span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> RandomForestClassifier
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> accuracy_score
+
+X = df[[<span class="st">"hours_studied"</span>, <span class="st">"attendance"</span>]]   <span class="cm"># features</span>
+y = df[<span class="st">"passed"</span>]                          <span class="cm"># label</span>
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42)      <span class="cm"># SPLIT</span>
+
+model = RandomForestClassifier()
+model.fit(X_train, y_train)                    <span class="cm"># FIT</span>
+predictions = model.predict(X_test)            <span class="cm"># PREDICT</span>
+accuracy = accuracy_score(y_test, predictions) <span class="cm"># EVALUATE</span>
+<span class="fn">print</span>(<span class="st">f"Accuracy: {accuracy:.2%}"</span>)</pre>
+    </div>
+
+    <div class="cycle">
+      <div class="cycle-head">◈ Learning Cycle — Chapter 08</div>
+      <div class="cycle-step"><span class="step-num">1</span><div class="step-content">
+        <h4>Read the concept table once</h4>
+        <p>Every algorithm — linear regression, random forest, SVM — has the same four-step shape. Learn the shape once, swap models freely.</p>
+      </div></div>
+      <div class="cycle-step"><span class="step-num">2</span><div class="step-content">
+        <h4>Type the code yourself — no copy-paste</h4>
+        <p>Type the S.F.P.E. loop on a small dataset. Then remove <code>train_test_split</code> and evaluate on training data — watch accuracy jump suspiciously high. Put the split back.</p>
+        <div class="step-hint">That inflated score is the single most common beginner mistake. Feel it once, never forget it.</div>
+      </div></div>
+      <div class="cycle-step"><span class="step-num">3</span><div class="step-content">
+        <h4>Apply it to your own data</h4>
+        <p>Run S.F.P.E. on your Module-3 dataset with two different models (e.g. LogisticRegression vs RandomForestClassifier). Compare accuracy.</p>
+        <div class="step-hint">This one comparison teaches more ML intuition than ten pages of algorithm theory.</div>
+      </div></div>
+      <div class="cycle-step"><span class="step-num">4</span><div class="step-content">
+        <h4>Reflect &amp; note</h4>
+        <p>Which model won? By how much? Was the difference even meaningful, or just noise?</p>
+        <textarea class="notes-area" id="notes" placeholder="e.g. LogisticRegression 0.81, RandomForest 0.84 — only 3% difference. Simpler model is probably the better choice..."></textarea>
+      </div></div>
+      <div class="cycle-step"><span class="step-num">5</span><div class="step-content">
+        <h4>Tick off before moving on</h4>
+        <ul class="checklist" id="checklist">
+          <li><input type="checkbox" id="c1"><label for="c1">I can name all four steps of S.F.P.E.</label></li>
+          <li><input type="checkbox" id="c2"><label for="c2">I typed and ran the S.F.P.E. loop myself.</label></li>
+          <li><input type="checkbox" id="c3"><label for="c3">I felt the inflated accuracy from skipping train_test_split.</label></li>
+          <li><input type="checkbox" id="c4"><label for="c4">I compared two models on my own data.</label></li>
+          <li><input type="checkbox" id="c5"><label for="c5">I wrote a reflection note above.</label></li>
+        </ul>
+      </div></div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <button class="reset-btn" id="resetAll">Reset chapter progress</button>
+</footer>
+
+<script>
+document.querySelectorAll('[data-copy]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const pre=btn.closest('.code-wrap').querySelector('pre');
+    navigator.clipboard.writeText(pre.innerText).then(()=>{
+      btn.textContent='copied';btn.classList.add('copied');
+      setTimeout(()=>{btn.textContent='copy';btn.classList.remove('copied');},1500);
+    });
+  });
+});
+const KEY='coding-concepts-ch8';
+document.querySelectorAll('#checklist input[type=checkbox]').forEach((box,i)=>{
+  const k=KEY+'-check-'+i;
+  try{if(localStorage.getItem(k)==='true')box.checked=true;}catch(e){}
+  box.addEventListener('change',()=>{try{localStorage.setItem(k,box.checked);}catch(e){}});
+});
+const notes=document.getElementById('notes');
+try{const s=localStorage.getItem(KEY+'-notes');if(s)notes.value=s;}catch(e){}
+notes.addEventListener('input',()=>{try{localStorage.setItem(KEY+'-notes',notes.value);}catch(e){}});
+document.getElementById('resetAll').addEventListener('click',()=>{
+  if(!confirm('Clear checklist and notes for Chapter 8?'))return;
+  try{Object.keys(localStorage).filter(k=>k.startsWith(KEY)).forEach(k=>localStorage.removeItem(k));}catch(e){}
+  document.querySelectorAll('#checklist input[type=checkbox]').forEach(b=>b.checked=false);
+  notes.value='';
+});
+</script>
+</body>
+</html>

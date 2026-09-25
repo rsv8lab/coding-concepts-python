@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coding Concepts — Learning Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F3F1EA;--ink:#0A1F44;--ink-soft:#324A73;--line:#C9CDBE;--accent:#B5501A;--accent-soft:rgba(181,80,26,.08);--card:#FFFFFF;color-scheme:light dark;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--paper:#141A26;--ink:#EDEFF5;--ink-soft:#9FB0D0;--line:#2B3448;--accent:#E07A45;--accent-soft:rgba(224,122,69,.12);--card:#1B2233;}}
+:root[data-theme="dark"]{--paper:#141A26;--ink:#EDEFF5;--ink-soft:#9FB0D0;--line:#2B3448;--accent:#E07A45;--accent-soft:rgba(224,122,69,.12);--card:#1B2233;}
+*{box-sizing:border-box;}
+body{background:var(--paper);font-family:'JetBrains Mono',monospace;color:var(--ink);margin:0;line-height:1.65;padding:0 0 60px;}
+.wrap{max-width:860px;margin:0 auto;padding:48px 24px;}
+.kicker{font-size:12px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;}
+.kicker::before{content:"# ";opacity:.7;}
+h1{font-family:'Fraunces',serif;font-weight:500;font-size:clamp(30px,5vw,44px);line-height:1.05;margin:0 0 12px;}
+h1 em{font-style:italic;font-weight:400;color:var(--ink-soft);}
+.intro{font-size:13.5px;color:var(--ink-soft);max-width:600px;margin:0 0 36px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
+.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:18px 20px;text-decoration:none;color:var(--ink);box-shadow:0 1px 0 var(--line),0 10px 24px -18px rgba(10,31,68,.25);transition:transform .12s,border-color .12s;}
+.card:hover{border-color:var(--accent);transform:translateY(-2px);}
+.card .num{font-size:10.5px;font-weight:700;letter-spacing:.16em;color:var(--accent);text-transform:uppercase;margin-bottom:6px;}
+.card h2{font-family:'Fraunces',serif;font-weight:500;font-size:18px;margin:0 0 6px;line-height:1.2;}
+.card h2 em{font-style:italic;font-weight:400;color:var(--ink-soft);}
+.card p{font-size:11.5px;color:var(--ink-soft);margin:0;}
+.progress-note{margin-top:36px;font-size:11.5px;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:18px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="kicker">python.stack · learning studio</p>
+  <h1>Coding <em>Concepts</em></h1>
+  <p class="intro">Nine modules, same W/H pattern throughout: read the concept table once, type the code yourself, apply it to your own data, then tick the checklist before moving on. Click any chapter to start — each one links to the rest.</p>
+
+  <div class="grid">
+    <a class="card" href="chapter1.html"><div class="num">Module 01</div><h2>Python Data Types <em>— The Foundation</em></h2><p>int, float, list, dict, set — every downstream library builds on these.</p></a>
+    <a class="card" href="chapter2.html"><div class="num">Module 02</div><h2>NumPy <em>— The Numeric Engine</em></h2><p>Shape, broadcasting, indexing — vectorised math without loops.</p></a>
+    <a class="card" href="chapter3.html"><div class="num">Module 03</div><h2>Pandas <em>— Tabular Data</em></h2><p>Load, filter, group, merge — the four verbs of real analysis.</p></a>
+    <a class="card" href="chapter4.html"><div class="num">Module 04</div><h2>Matplotlib &amp; Seaborn <em>— Seeing Data</em></h2><p>Figure, Axes, Plot — always look before you model.</p></a>
+    <a class="card" href="chapter5.html"><div class="num">Module 05</div><h2>SciPy <em>— Scientific Operations</em></h2><p>Stats, Optimize, Signal — algorithms on top of NumPy arrays.</p></a>
+    <a class="card" href="chapter6.html"><div class="num">Module 06</div><h2>openpyxl <em>— Excel I/O</em></h2><p>Real .xlsx files with formatting, formulas, and merged cells.</p></a>
+    <a class="card" href="chapter7.html"><div class="num">Module 07</div><h2>GUI <em>— PySide6</em></h2><p>Widget, Import, Signal, Handler — wrap your logic in a window.</p></a>
+    <a class="card" href="chapter8.html"><div class="num">Module 08</div><h2>scikit-learn <em>— Machine Learning</em></h2><p>Split, Fit, Predict, Evaluate — one contract, every algorithm.</p></a>
+    <a class="card" href="chapter9.html"><div class="num">Module 09</div><h2>Advanced AI <em>— Beyond Classical ML</em></h2><p>Forward, Loss, Backward, Update — neural nets on tensors.</p></a>
+  </div>
+
+  <p class="progress-note">Each chapter's checklist and notes are saved locally in your browser as you go — nothing is sent anywhere. Reopen this book any time and your progress on each chapter is still there.</p>
+</div>
+</body>
+</html>
