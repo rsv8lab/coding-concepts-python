@@ -31,4 +31,4 @@ Each chapter's checklist and reflection notes are saved with `localStorage`, sco
 
 ## Author
 
-Kamol Das · CSE, Oxford University
+Kamol Das · MBIO, University of Chittagong
